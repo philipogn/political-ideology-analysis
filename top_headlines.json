@@ -1,0 +1,136 @@
+{
+  "status": "ok",
+  "totalResults": 10,
+  "articles": [
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "Trump to meet Venezuela's María Corina Machado on Thursday",
+      "description": "Machado, the winner of 2025 Nobel Peace Prize, had offered to share the honour with Trump,  an award the president has long coveted.",
+      "url": "https://www.bbc.co.uk/news/articles/cr7jzpr95yvo",
+      "urlToImage": "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/ded5/live/cbde00d0-eff7-11f0-be92-3d10f1095d70.jpg",
+      "publishedAt": "2026-01-12T21:52:21.0815939Z",
+      "content": "Earlier, Trump had expressed displeasure over Machado's decision to accept the Nobel Peace Prize, an honour the president has long coveted.\r\nAsked on Friday whether receiving Machado's prize might ch… [+1593 chars]"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "UK set for a 'booming' mortgage market, say analysts",
+      "description": "Competition among lenders in the UK suggests that rates could be cut in the coming weeks.",
+      "url": "https://www.bbc.co.uk/news/articles/c4gv7vl06e1o",
+      "urlToImage": "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/0717/live/3f195f90-efb2-11f0-b61c-6bc75d705b6c.png",
+      "publishedAt": "2026-01-12T21:37:21.9086736Z",
+      "content": "In general, mortgage brokers have suggested there is some pent-up demand among potential buyers who were waiting for the Budget and the festive period to be over before making firm plans to move.\r\nHo… [+1123 chars]"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "What a new law and an investigation could mean for Grok AI deepfakes",
+      "description": "Elon Musk's chatbot is under fire for altering images of women to remove their clothes without their consent.",
+      "url": "https://www.bbc.co.uk/news/articles/ckgvx88md4do",
+      "urlToImage": "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/5f33/live/7c5ee4d0-efdd-11f0-b385-5f48925de19a.jpg",
+      "publishedAt": "2026-01-12T20:37:27.2533157Z",
+      "content": "\"AI undressing people in photos isn't free speech - it's abuse,\" says campaigner Ed Newton Rex.\r\n\"When every photo a woman posts of themselves on X immediately attracts public replies in which they'v… [+1625 chars]"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "Labour MPs urge minister to reject Chinese mega embassy",
+      "description": "Nine MPs raise security concerns about the proposed site, just days before the deadline for a decision.",
+      "url": "https://www.bbc.co.uk/news/articles/cdre527zymzo",
+      "urlToImage": "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/b1de/live/d568a780-efda-11f0-be9a-5d00009628a6.png",
+      "publishedAt": "2026-01-12T20:37:18.253198Z",
+      "content": "Among the issues the MPs highlight are \"the recent track record of Chinese espionage cases, interference activities, and issuing of bounties against UK-based Hong Kongers\", as well as \"the fact that … [+2194 chars]"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "Iran protests: Eyewitnesses describe deadly crackdown across country",
+      "description": "The BBC has received eyewitness accounts of security forces attacking anti-government protesters across the country.",
+      "url": "https://www.bbc.co.uk/news/articles/cvgp70ynx1po",
+      "urlToImage": "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/fb03/live/7d6a9300-efde-11f0-a422-4ba8a094a8fa.jpg",
+      "publishedAt": "2026-01-12T20:37:15.7225771Z",
+      "content": "Graphic videos published on the activist-run Telegram channel Vahid Online on Sunday showed a large number of bodies at the Kahrizak Forensic Medical Centre in Tehran, with many families either mourn… [+1591 chars]"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "Lyse Doucet: Iran's rulers face biggest challenge since 1979 revolution",
+      "description": "The authorities are responding to protests with a ferocious security crackdown and near total internet shutdown.",
+      "url": "https://www.bbc.co.uk/news/articles/c3ve572edzqo",
+      "urlToImage": "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/672b/live/4db48950-efe2-11f0-905f-5d97c5098fca.jpg",
+      "publishedAt": "2026-01-12T19:07:17.8632707Z",
+      "content": "This latest wave has been unique in many ways.\r\nIt began in a most ordinary way. On 28 December, traders selling imported electronic goods in Tehran were jolted by the sudden currency collapse; they … [+2483 chars]"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "Rosita Mabuiango: 'Miracle baby' born in a tree above Mozambique floodwaters dies aged 25",
+      "description": "Rosita Salvador Mabuiango's mother was sheltering for days before giving birth perched above the water.",
+      "url": "https://www.bbc.co.uk/news/articles/c79re5415n2o",
+      "urlToImage": "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/7b7c/live/1a0636a0-efd6-11f0-a422-4ba8a094a8fa.jpg",
+      "publishedAt": "2026-01-12T18:37:22.8942631Z",
+      "content": "On Monday, confirming the news of Rosita's death at 25, her sister Celia Salvador told the BBC that she had \"passed away after a prolonged illness. I'm extremely sad. She died of an illness I am unab… [+1385 chars]"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "UK not as ready as we need to be for full-scale war, says Army chief",
+      "description": "Sir Richard Knighton refuses to confirm the existence of a £28bn shortfall in defence spending plans.",
+      "url": "https://www.bbc.co.uk/news/articles/cj6wrd18zgro",
+      "urlToImage": "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/a99b/live/34307250-efd8-11f0-9e54-df40db17e1d2.jpg",
+      "publishedAt": "2026-01-12T18:37:20.8166559Z",
+      "content": "Following Russia's invasion of Ukraine and the re-election of US President Donald Trump, the UK, along with other Nato countries, has come under pressure to boost its defence spending.\r\nLast year, La… [+1332 chars]"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "UK to bring into force law to tackle Grok AI deepfakes this week",
+      "description": "The technology secretary said it would be illegal for companies to supply the tools designed to make them.",
+      "url": "https://www.bbc.co.uk/news/articles/cq845glnvl1o",
+      "urlToImage": "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/b181/live/401595e0-efde-11f0-be9a-5d00009628a6.jpg",
+      "publishedAt": "2026-01-12T17:52:27.5201181Z",
+      "content": "It comes hours after Ofcom announced it was launching an investigation into X over \"deeply concerning reports\" about Grok altering images of people.\r\nIn a statement, Kendall urged the regulator not t… [+974 chars]"
+    },
+    {
+      "source": {
+        "id": "bbc-news",
+        "name": "BBC News"
+      },
+      "author": "BBC News",
+      "title": "Fomer chancellor Nadim Zahawi defects to Reform UK",
+      "description": "Zahawi was a Conservative MP and served as chancellor under Boris Johnson.",
+      "url": "https://www.bbc.co.uk/news/articles/c0lxn75gw1do",
+      "urlToImage": "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/5739/live/212c2ca0-efa9-11f0-82ea-3f2eb9f68174.png",
+      "publishedAt": "2026-01-12T11:37:16.6107013Z",
+      "content": "In a speech to Reform supporters, Zahawi said issues with free speech \"on X or even just down the pub\", and anyone trying to earn a living \"without getting ground into the dirt\" by taxes were reasons… [+747 chars]"
+    }
+  ]
+}
