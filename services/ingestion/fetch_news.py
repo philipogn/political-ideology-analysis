@@ -5,6 +5,7 @@ from newsapi import NewsApiClient
 from services.ingestion.db import session_local
 from services.ingestion.models import Article
 import hashlib
+from typing import List
 
 load_dotenv()
 
@@ -14,31 +15,46 @@ if NEWS_API_KEY is None:
 
 newsapi = NewsApiClient(api_key=NEWS_API_KEY)
 
-# top_headlines = newsapi.get_top_headlines(sources='bbc-news',
-#                                           language='en')
+def remove_duplicate_articles(articles):
+    '''
+    Choosing to remove duplicate titles due to the pipeline is planned
+    to only process titles, 
+    Could do url but some urls differ with exact same article content
+    Could also do title+author(+description), but unnecessary steps for now...  
+    '''
+    seen = set()
+    cleaned = []
+    for article in articles:
+        title = article.get('title')
+        if title in seen:
+            continue
+        seen.add(title)
+        cleaned.append(article)
+    return cleaned
 
-def get_news_articles():
+def get_news_articles(pages: int) -> List:
     all_articles = []
-    for i in range(5):
-        all_headlines = newsapi.get_everything(q='politics', page=i+1)
+    for i in range(1, pages + 1):
+        all_headlines = newsapi.get_top_headlines(page=i)
         all_articles.extend(all_headlines['articles'])
+    return all_articles
 
-    with open('every_headline.json', 'w', encoding='utf-8') as f:
-        json.dump(all_articles, f, indent=2)
+fetch_articles = get_news_articles(5)
+fetch_articles = remove_duplicate_articles(fetch_articles)
 
-get_news_articles()
+with open('every_headline.json', 'w', encoding='utf-8') as f:
+    json.dump(fetch_articles, f, indent=2)
+
 
 def load_and_count():
     with open('every_headline.json', 'r') as f:
         headlines = json.load(f)
     print(len(headlines['articles']))
-
 # load_and_count()
 
 
 # with open('top_headlines.json', 'w', encoding='utf-8') as f:
 #     json.dump(top_headlines, f, indent=2, ensure_ascii=False)
-
 # print(top_headlines)
 
 def make_id(source, title):
@@ -64,10 +80,12 @@ def save_article(article_data):
 # for a in top_headlines['articles']:
 #     save_article(a)
 
-'''    article_id = Column(String, primary_key=True)
-    source = Column(String, nullable=False)
-    title = Column(String, nullable=False)
-    description = Column(String, nullable=False)
-    content = Column(String)
-    published_at = Column(DateTime, default=datetime.now)
-    url = Column(String, nullable=False)'''
+''' 
+article_id = Column(String, primary_key=True)
+source = Column(String, nullable=False)
+title = Column(String, nullable=False)
+description = Column(String, nullable=False)
+content = Column(String)
+published_at = Column(DateTime, default=datetime.now)
+url = Column(String, nullable=False)
+'''
