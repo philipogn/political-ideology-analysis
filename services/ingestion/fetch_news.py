@@ -15,7 +15,7 @@ if NEWS_API_KEY is None:
 
 newsapi = NewsApiClient(api_key=NEWS_API_KEY)
 
-def remove_duplicate_articles(articles):
+def remove_duplicate_articles(articles: List) -> List:
     '''
     Choosing to remove duplicate titles due to the pipeline is planned
     to only process titles, 
@@ -39,25 +39,12 @@ def get_news_articles(pages: int) -> List:
         all_articles.extend(all_headlines['articles'])
     return all_articles
 
-fetch_articles = get_news_articles(5)
-fetch_articles = remove_duplicate_articles(fetch_articles)
-
-with open('every_headline.json', 'w', encoding='utf-8') as f:
-    json.dump(fetch_articles, f, indent=2)
-
-
 def load_and_count():
     with open('every_headline.json', 'r') as f:
         headlines = json.load(f)
     print(len(headlines['articles']))
-# load_and_count()
 
-
-# with open('top_headlines.json', 'w', encoding='utf-8') as f:
-#     json.dump(top_headlines, f, indent=2, ensure_ascii=False)
-# print(top_headlines)
-
-def make_id(source, title):
+def make_id(source: str, title: str):
     return hashlib.sha256(f'{source}{title}'.encode()).hexdigest()
 
 def save_article(article_data):
@@ -77,9 +64,6 @@ def save_article(article_data):
     finally:
         db.close()
 
-# for a in top_headlines['articles']:
-#     save_article(a)
-
 ''' 
 article_id = Column(String, primary_key=True)
 source = Column(String, nullable=False)
@@ -89,3 +73,15 @@ content = Column(String)
 published_at = Column(DateTime, default=datetime.now)
 url = Column(String, nullable=False)
 '''
+
+if __name__ == '__main__':
+    fetch_articles = get_news_articles(5)
+    fetch_articles = remove_duplicate_articles(fetch_articles)
+
+    with open('every_headline.json', 'w', encoding='utf-8') as f:
+        json.dump(fetch_articles, f, indent=2)#, ensure_ascii=False)
+
+    # load_and_count()
+
+    # for a in top_headlines['articles']:
+    #     save_article(a)
