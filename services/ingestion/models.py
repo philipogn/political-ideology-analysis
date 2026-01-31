@@ -12,7 +12,7 @@ class Article(Base):
     article_id = Column(String, primary_key=True)
     source = Column(String, nullable=False)
     title = Column(String, nullable=False)
-    description = Column(String, nullable=False)
+    description = Column(String, nullable=True)
     content = Column(String)
     published_at = Column(DateTime, default=datetime.now)
     url = Column(String, nullable=False)
