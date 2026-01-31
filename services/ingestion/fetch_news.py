@@ -35,16 +35,11 @@ def remove_duplicate_articles(articles: List) -> List:
 def get_news_articles(pages: int) -> List:
     all_articles = []
     for i in range(1, pages + 1):
-        all_headlines = newsapi.get_top_headlines(page=i)
+        all_headlines = newsapi.get_everything(q='trump', page=i)
         all_articles.extend(all_headlines['articles'])
     return all_articles
 
-def load_and_count():
-    with open('every_headline.json', 'r') as f:
-        headlines = json.load(f)
-    print(len(headlines['articles']))
-
-def make_id(source: str, title: str):
+def make_id(source, title):
     return hashlib.sha256(f'{source}{title}'.encode()).hexdigest()
 
 def save_article(article_data):
@@ -52,7 +47,7 @@ def save_article(article_data):
     try:
         article = Article(
             article_id = make_id(article_data['source']['name'], article_data['title']),
-            source=article_data['author'],
+            source=article_data['source']['name'],
             title=article_data['title'],
             description=article_data['description'],
             content=article_data['content'],
@@ -63,6 +58,16 @@ def save_article(article_data):
         db.commit()
     finally:
         db.close()
+
+def add_articles_to_db(pages: int):
+    articles = get_news_articles(pages)
+    articles = remove_duplicate_articles(articles)
+    for a in articles:
+        save_article(a)
+    with open('every_headline.json', 'w', encoding='utf-8') as f:
+        json.dump(articles, f, indent=2)#, ensure_ascii=False)
+    print(f'Extracted and inserted {len(articles)} articles...')
+
 
 ''' 
 article_id = Column(String, primary_key=True)
@@ -75,13 +80,5 @@ url = Column(String, nullable=False)
 '''
 
 if __name__ == '__main__':
-    fetch_articles = get_news_articles(5)
-    fetch_articles = remove_duplicate_articles(fetch_articles)
-
-    with open('every_headline.json', 'w', encoding='utf-8') as f:
-        json.dump(fetch_articles, f, indent=2)#, ensure_ascii=False)
-
-    # load_and_count()
-
-    # for a in top_headlines['articles']:
-    #     save_article(a)
+    fetch_articles = add_articles_to_db(5)
+    
