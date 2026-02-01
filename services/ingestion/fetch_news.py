@@ -32,10 +32,10 @@ def remove_duplicate_articles(articles: List) -> List:
         cleaned.append(article)
     return cleaned
 
-def get_news_articles(pages: int) -> List:
+def get_news_articles(keyword: str, pages: int = 5) -> List:
     all_articles = []
     for i in range(1, pages + 1):
-        all_headlines = newsapi.get_everything(q='trump', page=i)
+        all_headlines = newsapi.get_everything(q=keyword, page=i)
         all_articles.extend(all_headlines['articles'])
     return all_articles
 
@@ -59,8 +59,16 @@ def save_article(article_data):
     finally:
         db.close()
 
-def add_articles_to_db(pages: int):
-    articles = get_news_articles(pages)
+def add_articles_to_db(keyword: str, pages: int):
+    '''
+    Docstring for add_articles_to_db
+    
+    :param pages: Pages of articles to get, 100 results per page
+    :type pages: int
+    :param keyword: Keyword or phrases to search for in article title and body from NewsAPI
+    :type keyword: str
+    '''
+    articles = get_news_articles(keyword, pages)
     articles = remove_duplicate_articles(articles)
     for a in articles:
         save_article(a)
@@ -68,17 +76,5 @@ def add_articles_to_db(pages: int):
         json.dump(articles, f, indent=2)#, ensure_ascii=False)
     print(f'Extracted and inserted {len(articles)} articles...')
 
-
-''' 
-article_id = Column(String, primary_key=True)
-source = Column(String, nullable=False)
-title = Column(String, nullable=False)
-description = Column(String, nullable=False)
-content = Column(String)
-published_at = Column(DateTime, default=datetime.now)
-url = Column(String, nullable=False)
-'''
-
 if __name__ == '__main__':
-    fetch_articles = add_articles_to_db(5)
-    
+    fetch_articles = add_articles_to_db(keyword='trump', pages=5)
