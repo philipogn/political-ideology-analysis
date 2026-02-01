@@ -84,20 +84,14 @@ def add_articles_to_db(keyword: List[str], pages: int):
     print(f'Extracted and inserted {len(articles)} articles...')
 
 def remove_bad_domains(url):
+    if not url:
+        return True
     parse_url = urlparse(url)
     if parse_url.netloc in exclude:
         return True
     else:
         return False
-    # print(parse_url.scheme)  # output: https
-    # print(parse_url.netloc)  # output: www.example.com
-    # print(parse_url.path)    # output: /path/page.html
-
-def test():
-    assert remove_bad_domains('https://consent.yahoo.com/v2/collectConsent?sessionId=1_cc-session_beaff8d3-671b-42bd-b3cf-5e3fcd0e1020') == False
-
 
 if __name__ == '__main__':
-    # political_keywords = ['trump', 'democracy', 'parliament', 'government']
-    # fetch_articles = add_articles_to_db(keyword=political_keywords, pages=5)
-    test()
+    political_keywords = ['trump', 'democracy', 'parliament', 'government']
+    fetch_articles = add_articles_to_db(keyword=political_keywords, pages=5)
