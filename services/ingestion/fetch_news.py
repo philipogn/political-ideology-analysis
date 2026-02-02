@@ -16,7 +16,7 @@ if NEWS_API_KEY is None:
 
 newsapi = NewsApiClient(api_key=NEWS_API_KEY)
 
-exclude = ['consent.yahoo.com']
+exclude_domains = ['consent.yahoo.com'] # cookie domain? doesn't contain any article info/content
 
 def get_news_articles(keyword: List[str], pages: int = 5) -> List:
     all_articles = []
@@ -48,6 +48,8 @@ def remove_duplicate_articles(articles: List) -> List:
 
 def make_id(source, title):
     return hashlib.sha256(f'{source}{title}'.encode()).hexdigest()
+    # MAYBE CHANGE THIS? TOO COMPLEX WITH 64 CHARS, MD5: 32 CHARS? OR SOMETHING ELSE?
+    # MAYBE JUST UUID? GUID?
 
 def save_article(article_data):
     db = session_local()
@@ -83,11 +85,11 @@ def add_articles_to_db(keyword: List[str], pages: int):
     #     json.dump(articles, f, indent=2)#, ensure_ascii=False)
     print(f'Extracted and inserted {len(articles)} articles...')
 
-def remove_bad_domains(url):
+def remove_bad_domains(url: str):
     if not url:
         return True
     parse_url = urlparse(url)
-    if parse_url.netloc in exclude:
+    if parse_url.netloc in exclude_domains:
         return True
     else:
         return False
