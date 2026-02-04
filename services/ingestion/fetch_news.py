@@ -17,15 +17,16 @@ if NEWS_API_KEY is None:
 
 newsapi = NewsApiClient(api_key=NEWS_API_KEY)
 
-exclude_domains = ['consent.yahoo.com'] # cookie domain? doesn't contain any article info/content
+# cookie domain? doesn't contain any article info/content + third parties
+exclude_domains = ['consent.yahoo.com', 'memeorandum.com'] 
 
-def get_news_articles(keyword: List[str], pages: int = 5) -> List:
+def get_news_articles(keyword: List[str], pages: int = 1) -> List:
     all_articles = []
     for word in keyword:
-        for i in range(1, pages + 1):
+        for page in range(1, pages + 1): # each page holds 100 (defualt/maximum) articles
             all_headlines = newsapi.get_everything(
                 q=word, 
-                page=i, 
+                page=page, 
                 language='en', 
                 # exclude_domains=('consent.yahoo.com') #doesnt work
             )
@@ -64,8 +65,8 @@ def save_article(article_data):
             article_id = make_id(article_data['source']['name'], article_data['title']),
             source=article_data['source']['name'],
             title=article_data['title'],
-            description=article_data['description'],
-            content=article_data['content'],
+            description=html_cleaning(article_data['description']),
+            content=html_cleaning(article_data['content']),
             published_at=article_data['publishedAt'],
             url=article_data['url']
         )
@@ -87,15 +88,14 @@ def add_articles_to_db(keyword: List[str], pages: int):
     articles = remove_duplicate_articles(articles)
     for a in articles:
         save_article(a)
-    # with open('every_headline.json', 'w', encoding='utf-8') as f:
-    #     json.dump(articles, f, indent=2)#, ensure_ascii=False)
     print(f'Extracted and inserted {len(articles)} articles...')
 
 def remove_bad_domains(url: str):
     if not url:
         return True
     parse_url = urlparse(url)
-    if parse_url.netloc in exclude_domains:
+    print(parse_url.path)
+    if parse_url.netloc in exclude_domains or 'video' in parse_url.path: # check for bad domains/video links
         return True
     else:
         return False
@@ -109,7 +109,3 @@ def html_cleaning(text):
 if __name__ == '__main__':
     political_keywords = ['trump', 'democracy', 'parliament', 'government', 'democrat', ]
     # fetch_articles = add_articles_to_db(keyword=queries, pages=1)
-    
-    text = '<ul><li>40 million on alert for Arctic blast</li><li>How long will brutal cold last?</li><li>Trump ties Greenland threats to Nobel Peace Prize snub</li><li>Latest in Minneapolis after 2 weeks o… [+4411 chars]'
-    
-    print(html_cleaning(text))
