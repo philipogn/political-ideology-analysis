@@ -7,6 +7,7 @@ from services.ingestion.models import Article
 import hashlib
 from typing import List
 from urllib.parse import urlparse
+from bs4 import BeautifulSoup
 
 load_dotenv()
 
@@ -22,7 +23,12 @@ def get_news_articles(keyword: List[str], pages: int = 5) -> List:
     all_articles = []
     for word in keyword:
         for i in range(1, pages + 1):
-            all_headlines = newsapi.get_everything(q=word, page=i)
+            all_headlines = newsapi.get_everything(
+                q=word, 
+                page=i, 
+                language='en', 
+                # exclude_domains=('consent.yahoo.com') #doesnt work
+            )
             all_articles.extend(all_headlines['articles'])
     return all_articles
 
@@ -48,8 +54,8 @@ def remove_duplicate_articles(articles: List) -> List:
 
 def make_id(source, title):
     return hashlib.sha256(f'{source}{title}'.encode()).hexdigest()
-    # MAYBE CHANGE THIS? TOO COMPLEX WITH 64 CHARS, MD5: 32 CHARS? OR SOMETHING ELSE?
-    # MAYBE JUST UUID? GUID?
+    # nevermind, md5 not collision resistant
+    # uuid problems against possible duplicate entries
 
 def save_article(article_data):
     db = session_local()
@@ -94,6 +100,16 @@ def remove_bad_domains(url: str):
     else:
         return False
 
+def html_cleaning(text):
+    if not text:
+        return text
+    clean = BeautifulSoup(text, 'html.parser')
+    return clean.get_text(separator=' ', strip=True)
+
 if __name__ == '__main__':
-    political_keywords = ['trump', 'democracy', 'parliament', 'government']
-    fetch_articles = add_articles_to_db(keyword=political_keywords, pages=5)
+    political_keywords = ['trump', 'democracy', 'parliament', 'government', 'democrat', ]
+    # fetch_articles = add_articles_to_db(keyword=queries, pages=1)
+    
+    text = '<ul><li>40 million on alert for Arctic blast</li><li>How long will brutal cold last?</li><li>Trump ties Greenland threats to Nobel Peace Prize snub</li><li>Latest in Minneapolis after 2 weeks o… [+4411 chars]'
+    
+    print(html_cleaning(text))
