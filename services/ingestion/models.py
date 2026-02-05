@@ -14,7 +14,7 @@ class Article(Base):
     title = Column(String, nullable=False)  
     description = Column(String, nullable=True)
     content = Column(String)
-    # keyword = Column(String, nullable=False)
+    keyword = Column(String, nullable=False)
     published_at = Column(DateTime, default=datetime.now)
     url = Column(String, nullable=False)
 
