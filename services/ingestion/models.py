@@ -1,7 +1,7 @@
 '''Schema'''
 
 from sqlalchemy.orm import declarative_base, relationship
-from sqlalchemy import Column, String, Text, DateTime, Float, ForeignKey, UniqueConstraint, Index
+from sqlalchemy import Column, String, DateTime, Float, ForeignKey, UniqueConstraint, Index
 from datetime import datetime
 
 Base = declarative_base()
@@ -14,7 +14,7 @@ class Article(Base):
     title = Column(String, nullable=False)  
     description = Column(String, nullable=True)
     content = Column(String)
-    keyword = Column(String, nullable=False)
+    matched_keyword_axis = Column(String, nullable=False)
     published_at = Column(DateTime, default=datetime.now)
     url = Column(String, nullable=False)
 
@@ -35,9 +35,7 @@ class InferenceResult(Base):
     x_coord = Column(Float, nullable=False) # right <-> left
     y_coord = Column(Float, nullable=False) # auth <-> lib
 
-    title = Column(String, nullable=False)
-    published_at = Column(DateTime, default=datetime.now)
-    axis_score = Column(Float)
+    confidence = Column(Float, nullable=False)
 
     article = relationship('Article', back_populates='inference_results')
     
