@@ -7,10 +7,10 @@ model_name = 'facebook/bart-large-mnli'
 ''' ===== DATACLASS ===== '''
 @dataclass
 class CompassValue:
-    econ_left = float
-    econ_right = float
-    social_auth = float
-    social_lib = float
+    econ_left: float
+    econ_right: float
+    social_auth: float
+    social_lib: float
 
 ''' ===== VARIABLES ===== '''
 
@@ -71,8 +71,15 @@ def inference(text):
     econ_left, econ_right = axis_score(text, ECON_LEFT, ECON_RIGHT)
     social_auth, social_lib = axis_score(text, SOCIAL_AUTH, SOCIAL_LIB)
 
-    print(f'Left: {econ_left} | Right {econ_right}')
-    print(f'Authoritarian: {social_auth} | Libertarian {social_lib}')
+    # need to implement confidence scoring
+
+    return CompassValue(
+        econ_left = econ_left,
+        econ_right = econ_right,
+        social_auth = social_auth,
+        social_lib = social_lib,
+
+    )
 
 
 if __name__ == '__main__':
@@ -83,4 +90,4 @@ if __name__ == '__main__':
     # print(result)
 
     ''' ===== MANUAL LOADING WITH TORCH ===== '''
-    inference(premise)
+    print(inference(premise))
