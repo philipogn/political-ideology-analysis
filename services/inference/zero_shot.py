@@ -8,6 +8,7 @@ model_name = 'facebook/bart-large-mnli'
 
 labels = ['left-wing', 'right-wing', 'authoritarian', 'libertarian']
 
+
 STANCE_LABELS = [
     "This supports left-wing or progressive political views.",
     "This supports right-wing or conservative political views.",
@@ -15,6 +16,7 @@ STANCE_LABELS = [
     "This supports libertarian ideas like individual freedom, limited government, free markets or civil liberties."
 ]
 
+# HYPOTHESIS
 ECON_LEFT = "This supports left-wing or progressive political views."
 ECON_RIGHT = "This supports right-wing or conservative political views."
 SOCIAL_AUTH = "This supports authoritarian policies like increased state control, surveillance, harsh policing or strict border enforcement."
@@ -27,10 +29,6 @@ The government will phase in the reforms over several years, with many measures 
 Archie Mitchell Business reporter A series of concessions on Labour's flagship workers' rights reforms will save businesses billions 
 of pounds, a government impact assessment shows. An initial analy… [+3408 chars]
 """
-
-# content 'falls into a political compass
-hypothesis = 'This supports left-wing or progressive political views'
-
 
 ''' ===== PIPELINE ===== '''
 # class InferPipeline:
@@ -74,7 +72,36 @@ results = sorted(
 
 print(results)
 
-# if __name__ == '__main__':
+def axis_score(premise, axis1, axis2):
+    batched_inference = [(premise, axis1), (premise, axis2)]
+    inputs = tokenizer(batched_inference, 
+                       return_tensors='pt', 
+                       truncation=True,
+                       padding=True
+                       )
+    
+    with torch.no_grad():
+        output = model(**inputs)
+        logits = output.logits
+
+    entailment_logits = logits[:,[0,2]]
+    probs = torch.softmax(entailment_logits, dim=1)
+    label_probs = probs[:,1]
+
+    axis1_score = float(label_probs[0])
+    axis2_score = float(label_probs[1])
+    return axis1_score, axis2_score
+
+
+def inference(text):
+    econ_left, econ_right = axis_score(text, ECON_LEFT, ECON_RIGHT)
+    social_auth, social_lib = axis_score(text, SOCIAL_AUTH, SOCIAL_LIB)
+
+    print(f'Left: {econ_left} | Right {econ_right}')
+    print(f'Authoritarian: {social_auth} | Libertarian {social_lib}')
+
+
+if __name__ == '__main__':
 #     model_name = 'facebook/bart-large-mnli'
 
 #     ''' ===== PIPELINE ===== '''
@@ -83,3 +110,4 @@ print(results)
 #     # print(result)
 
 #     ''' ===== MANUAL LOADING WITH TORCH ===== '''
+    inference(premise)
