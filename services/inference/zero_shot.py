@@ -71,6 +71,15 @@ def inference(text):
     econ_left, econ_right = axis_score(text, ECON_LEFT, ECON_RIGHT)
     social_auth, social_lib = axis_score(text, SOCIAL_AUTH, SOCIAL_LIB)
 
+    '''
+    !!! CURRENT ISSUE !!!
+    mnli model able to classify topic of article, not stance
+    - one solution
+        for e.g., article critiquing right-wing policies/views should be labelled as left-wing (in theory but correlation != rule)
+        so maybe political axis (classify topic on political axis) and emotion of content (positive/negative/neutral)
+        but again, it can correlate, but does not imply, e.g., critiquing right !-> left-leaning author/article...
+    '''
+    
     # need to implement confidence scoring
 
     return CompassValue(
