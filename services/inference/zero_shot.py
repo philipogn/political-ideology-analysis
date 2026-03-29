@@ -2,8 +2,13 @@ import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from transformers import pipeline
 from dataclasses import dataclass
+from torch.nn.functional import softmax
+from torch import argmax
 
+# mnli model able to classify topic of article, not stance
 model_name = 'facebook/bart-large-mnli'
+tokenizer_name = ''
+
 ''' ===== DATACLASS ===== '''
 @dataclass
 class CompassValue:
@@ -47,6 +52,9 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 model.eval()
 
 def axis_score(premise, axis1, axis2):
+    '''
+    Scoring the premise against the two axes
+    '''
     batched_inference = [(premise, axis1), (premise, axis2)]
     inputs = tokenizer(batched_inference, 
                        return_tensors='pt', 
