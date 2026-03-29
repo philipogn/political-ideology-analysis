@@ -2,8 +2,6 @@ import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from transformers import pipeline
 from dataclasses import dataclass
-from torch.nn.functional import softmax
-from torch import argmax
 
 # mnli model able to classify topic of article, not stance
 model_name = 'facebook/bart-large-mnli'
@@ -16,6 +14,8 @@ class CompassValue:
     econ_right: float
     social_auth: float
     social_lib: float
+    positive: float
+    negative: float
 
 ''' ===== VARIABLES ===== '''
 
@@ -27,6 +27,9 @@ ECON_RIGHT = "This text supports right-wing or conservative political views."
 SOCIAL_AUTH = "This text supports authoritarian policies like increased state control, surveillance, harsh policing or strict border enforcement."
 SOCIAL_LIB = "This text supports libertarian ideas like individual freedom, limited government, free markets or civil liberties."
 
+POSITIVE = "This text expresses positive sentiment or supports the stated position."
+NEGATIVE = "This text expresses negative sentiment or opposes the stated position."
+
 # content to infer
 premise = """
 Labour's workers' rights concessions to save businesses billions, assessment shows	
@@ -34,6 +37,8 @@ The government will phase in the reforms over several years, with many measures 
 Archie Mitchell Business reporter A series of concessions on Labour's flagship workers' rights reforms will save businesses billions 
 of pounds, a government impact assessment shows. An initial analy… [+3408 chars]
 """
+# premise = """Nvidia's (NVDA) China business continues to face geopolitical hurdles, which could pose longer-term competitive risks for the AI chipmaker.
+# Ongoing US-China tensions have upended Nvidias sales in wh… [+4297 chars]"""
 
 ''' ===== PIPELINE ===== '''
 # class InferPipeline:
@@ -78,6 +83,7 @@ def axis_score(premise, axis1, axis2):
 def inference(text):
     econ_left, econ_right = axis_score(text, ECON_LEFT, ECON_RIGHT)
     social_auth, social_lib = axis_score(text, SOCIAL_AUTH, SOCIAL_LIB)
+    positive, negative = axis_score(text, POSITIVE, NEGATIVE)
 
     '''
     !!! CURRENT ISSUE !!!
@@ -95,7 +101,8 @@ def inference(text):
         econ_right = econ_right,
         social_auth = social_auth,
         social_lib = social_lib,
-
+        positive = positive, 
+        negative = negative
     )
 
 
