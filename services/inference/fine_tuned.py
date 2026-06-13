@@ -5,19 +5,6 @@ from dataclasses import dataclass
 from torch.nn.functional import softmax
 from torch import argmax
 
-# model to determine politicalness
-# https://huggingface.co/mlburnham/Political_DEBATE_large_v1.0
-politicalness_pipe = pipeline(
-    "zero-shot-classification", 
-    model="models/Political_DEBATE_large_v1.0", 
-    local_files_only=True
-)
-
-# fine tuned model for political leaning
-# https://huggingface.co/matous-volf/political-leaning-deberta-large
-model_name = 'matous-volf/political-leaning-deberta-large'
-tokenizer_name = 'microsoft/deberta-v3-large'
-
 ''' ===== DATACLASS ===== '''
 @dataclass
 class CompassValue:
@@ -26,24 +13,19 @@ class CompassValue:
     social_auth: float
     social_lib: float
 
-''' ===== VARIABLES ===== '''
+# model to determine politicalness (https://huggingface.co/mlburnham/Political_DEBATE_large_v1.0)
+politicalness_pipe = pipeline(
+    "zero-shot-classification", 
+    model="models/Political_DEBATE_large_v1.0", 
+    local_files_only=True
+)
 
-labels = ['left-wing', 'right-wing', 'authoritarian', 'libertarian']
-
-# HYPOTHESIS
-ECON_LEFT = "This text supports left-wing or progressive political views."
-ECON_RIGHT = "This text supports right-wing or conservative political views."
-SOCIAL_AUTH = "This text supports authoritarian policies like increased state control, surveillance, harsh policing or strict border enforcement."
-SOCIAL_LIB = "This text supports libertarian ideas like individual freedom, limited government, free markets or civil liberties."
+# fine tuned model for political leaning (https://huggingface.co/matous-volf/political-leaning-deberta-large)
+stance_tokenizer = AutoTokenizer.from_pretrained("matous-volf/political-leaning-deberta-large")
+stance_model = AutoModelForSequenceClassification.from_pretrained("matous-volf/political-leaning-deberta-large")
+stance_model.eval()
 
 # content to infer
-# premise = """
-# Labour's workers' rights concessions to save businesses billions, assessment shows	
-# The government will phase in the reforms over several years, with many measures subject to consultation.	
-# Archie Mitchell Business reporter A series of concessions on Labour's flagship workers' rights reforms will save businesses billions 
-# of pounds, a government impact assessment shows. An initial analy… [+3408 chars]
-# """
-
 # premise = '''
 # Even as Big Tech CEOs curry favor with President Trump, 
 # Silicon Valley employees are calling on their bosses to use their influence to help stop his immigration policies
@@ -54,28 +36,20 @@ The 63-year-old has agreed a three-year deal and will begin work when the squad 
 Real Madrid have paid Benfica £13m (15m euros) in compensation to bring the Portuguese head coach back to the Bernabeu - some 13 years after his first stint at the club came to an end.
 Florentino Perez had vowed to reappoint Mourinho as head coach if re-elected as club president earlier this month.'''
 
-''' ===== POLITICAL LEARNING ===== '''
+# premise = '''Israel carries out air strikes on Lebanon, state media says, as Iran claims deal with US near'''
 
-model = AutoModelForSequenceClassification.from_pretrained(model_name)
-tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
-model.eval()
-
-def politicalness(input_text):
+def about_politics(input_text):
     '''
     Classify whether text is political or not, for stance inference
     '''
     politicalness = politicalness_pipe(
         input_text,
-        ["is not", "is"],
+        ["is", "is not"],
         hypothesis_template="This text {} about politics.",
         multi_label=False,
     )
-
-    max_idx = politicalness['scores'].index(max(politicalness['scores']))
-    predicted_class_politicalness = {
-        "is not": "non-political",
-        "is": "political"
-    }[politicalness['labels'][max_idx]]
+    max_idx = politicalness["scores"].index(max(politicalness["scores"]))
+    predicted_class_politicalness = {"is": True,"is not": False}[politicalness["labels"][max_idx]]
     return predicted_class_politicalness
 
 
@@ -83,7 +57,7 @@ def axis_score(input_text):
     '''
     Scoring the premise against left and right 
     '''
-    inputs = tokenizer(
+    inputs = stance_tokenizer(
         input_text, 
         return_tensors='pt', 
         truncation=True,
@@ -91,22 +65,21 @@ def axis_score(input_text):
     )
     
     with torch.no_grad():
-        output = model(**inputs)
+        output = stance_model(**inputs)
         logits = output.logits
 
     political_lean = argmax(logits, dim=1).item()
     probs = softmax(logits, dim=1)
     score = probs[0, political_lean].item()
-    compass = 'Left' if political_lean == 0 else 'Center' if political_lean == 1 else 'Right'
-    return {'Economic scale': compass, 'Confidence score': score}
+    compass = "Left" if political_lean == 0 else "Center" if political_lean == 1 else "Right"
+    return {"Economic scale": compass, "Confidence score": score}
+
+def politicalness_inference(input_text):
+    if about_politics(input_text) == True:
+        return axis_score(input_text)
+    else:
+        return ("The article is non political")
 
 
-if __name__ == '__main__':
-    # print(inference(premise))
-    print(politicalness(premise))
-    # print(axis_score(premise))
-
-    # test = {'score': [0.578943, 0.213]}
-
-    # max_index = test['score'].index(max(test['score']))
-    # print(max_index)
+if __name__ == "__main__":
+    print(politicalness_inference(premise))
